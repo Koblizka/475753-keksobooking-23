@@ -2,11 +2,11 @@ const randomize = (min, max, isInclude) => isInclude ? Math.random() * (max - mi
 
 const getRandomInteger = (min, max) => {
   if (min < 0 || max < 0) {
-    return 'Числа не могут быть отрицательными, попробуй снова!';
+    throw new Error('Числа не могут быть отрицательными, попробуй снова!');
   }
 
   if (min > max) {
-    return '«max» не может быть меньше, чем «min»';
+    throw new Error('«max» не может быть меньше, чем «min»');
   }
 
   if (min === max)  {
@@ -21,11 +21,11 @@ const getRandomInteger = (min, max) => {
 
 const getRandomFloat = (min, max, decimalPoints) => {
   if (min < 0 || max < 0) {
-    return 'Числа не могут быть отрицательными, попробуй снова!';
+    throw new Error('Числа не могут быть отрицательными, попробуй снова!');
   }
 
   if (min > max) {
-    return '«max» не может быть меньше, чем «min»';
+    throw new Error('«max» не может быть меньше, чем «min»');
   }
 
   if (min === max)  {
