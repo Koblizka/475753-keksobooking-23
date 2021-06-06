@@ -35,9 +35,17 @@ const getRandomFloat = (min, max, decimalPoints) => {
   return Number.parseFloat(randomize(min, max, false).toFixed(decimalPoints));
 };
 
-const AVATAR_COUNT = 8;
 const NUMBER_OF_OFFERS = 10;
-const AVATARS = new Array(AVATAR_COUNT).fill(0).map((avatar, index) => `img/avatars/user${String(index + 1).padStart(2, 0)}.png`);
+const AVATARS = [
+  'img/avatars/user01.png',
+  'img/avatars/user02.png',
+  'img/avatars/user03.png',
+  'img/avatars/user04.png',
+  'img/avatars/user05.png',
+  'img/avatars/user06.png',
+  'img/avatars/user07.png',
+  'img/avatars/user08.png',
+];
 const OFFER_TITLES = [
   'Лучшее предложение ева',
   'Ты никогда такого не видел',
@@ -103,27 +111,28 @@ const OFFER_CAPACITY = [
   3,
   'не для гостей',
 ];
-const getRanodomeArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
+const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 const shuffle = (array) => {
-  let arrayLength = array.length;
+  const tempArray = array.slice();
+  let arrayLength = tempArray.length;
   let currentElement;
   let remainingElement;
 
-  while (arrayLength) {
+  tempArray.forEach(() => {
     remainingElement = Math.floor(Math.random() * arrayLength--);
-    currentElement = array[arrayLength];
-    array[arrayLength] = array[remainingElement];
-    array[remainingElement] = currentElement;
-  }
+    currentElement = tempArray[arrayLength];
+    tempArray[arrayLength] = tempArray[remainingElement];
+    tempArray[remainingElement] = currentElement;
+  });
 
-  return array;
+  return tempArray;
 };
 
 const getRandomBunchArrayElements = (features) => {
   shuffle(features);
 
-  return features.slice(0, getRandomInteger(0, features.length - 1));
+  return features.slice(0, getRandomInteger(0, features.length));
 };
 
 const getOffer = () => {
@@ -132,19 +141,19 @@ const getOffer = () => {
 
   return {
     author: {
-      avatar: getRanodomeArrayElement(AVATARS),
+      avatar: getRandomArrayElement(AVATARS),
     },
     offer: {
-      title: getRanodomeArrayElement(OFFER_TITLES),
+      title: getRandomArrayElement(OFFER_TITLES),
       address: `${locationX}, ${locationY}`,
       price: getRandomInteger(OfferPriceRange.MIN, OfferPriceRange.MAX),
-      type: getRanodomeArrayElement(OFFER_TYPES),
-      rooms: getRanodomeArrayElement(OFFER_ROOM_AMOUNTS),
-      guests: getRanodomeArrayElement(OFFER_CAPACITY),
-      checkin: getRanodomeArrayElement(OFFER_CHEKINOUTS),
-      checkout: getRanodomeArrayElement(OFFER_CHEKINOUTS),
+      type: getRandomArrayElement(OFFER_TYPES),
+      rooms: getRandomArrayElement(OFFER_ROOM_AMOUNTS),
+      guests: getRandomArrayElement(OFFER_CAPACITY),
+      checkin: getRandomArrayElement(OFFER_CHEKINOUTS),
+      checkout: getRandomArrayElement(OFFER_CHEKINOUTS),
       features: getRandomBunchArrayElements(OFFER_FEATURES),
-      description: getRanodomeArrayElement(OFFER_DESCRIPTIOPNS),
+      description: getRandomArrayElement(OFFER_DESCRIPTIOPNS),
       photos: getRandomBunchArrayElements(OFFER_PHOTOS),
     },
     location: {
