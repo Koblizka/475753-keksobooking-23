@@ -1,3 +1,5 @@
+import * as util from './utils.js';
+
 const NUMBER_OF_OFFERS = 10;
 const AVATARS = [
   'img/avatars/user01.png',
@@ -75,6 +77,36 @@ const OFFER_CAPACITY = [
   'не для гостей',
 ];
 
+const getOffer = () => {
+  const locationX = util.getRandomFloat(35.65000, 35.70000, 5);
+  const locationY = util.getRandomFloat(139.70000, 139.80000, 5);
+
+  return {
+    author: {
+      avatar: util.getRandomArrayElement(AVATARS),
+    },
+    offer: {
+      title: util.getRandomArrayElement(OFFER_TITLES),
+      address: `${locationX}, ${locationY}`,
+      price: util.getRandomInteger(OfferPriceRange.MIN, OfferPriceRange.MAX),
+      type: util.getRandomArrayElement(OFFER_TYPES),
+      rooms: util.getRandomArrayElement(OFFER_ROOM_AMOUNTS),
+      guests: util.getRandomArrayElement(OFFER_CAPACITY),
+      checkin: util.getRandomArrayElement(OFFER_CHEKINOUTS),
+      checkout: util.getRandomArrayElement(OFFER_CHEKINOUTS),
+      features: util.getRandomBunchArrayElements(OFFER_FEATURES),
+      description: util.getRandomArrayElement(OFFER_DESCRIPTIOPNS),
+      photos: util.getRandomBunchArrayElements(OFFER_PHOTOS),
+    },
+    location: {
+      lat: locationX,
+      lng: locationY,
+    },
+  };
+};
+
+const offers = new Array(NUMBER_OF_OFFERS).fill(null).map(getOffer);
+
 export {
   NUMBER_OF_OFFERS,
   AVATARS,
@@ -86,5 +118,6 @@ export {
   OFFER_PHOTOS,
   OfferPriceRange,
   OFFER_ROOM_AMOUNTS,
-  OFFER_CAPACITY
+  OFFER_CAPACITY,
+  offers
 };

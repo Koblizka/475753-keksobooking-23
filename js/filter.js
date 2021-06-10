@@ -1,1 +1,0 @@
-// for offers filter
