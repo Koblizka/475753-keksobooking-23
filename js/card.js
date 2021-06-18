@@ -2,6 +2,116 @@ import {offers} from './data.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
+const fillTextContent = (element, property, textContent) => {
+  if (property.length === 0) {
+    element.remove();
+
+    return false;
+  }
+
+  element.textContent = textContent;
+};
+
+const fillTextContentTwoProperties = (element, propertyOne, propertyTwo, textContent) => {
+  if (propertyOne.length === 0 || propertyTwo.length === 0) {
+    element.remove();
+
+    return false;
+  }
+
+  element.textContent = textContent;
+};
+
+const fillElementSrc = (element, srcData) => {
+  if (element.length === 0) {
+    element.remove();
+
+    return false;
+  }
+
+  element.src = srcData;
+};
+
+const fillPrice = (priceData) => {
+  if (priceData.length === 0) {
+    price.remove();
+
+    return false;
+  }
+
+  price.textContent = `${priceData.price} `;
+  price.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
+};
+
+const fillCapacity = (number) => {
+  let rooms = 'комнаты';
+  let guests = 'гостей';
+
+  if (number.rooms === 1) {
+    rooms = 'комната';
+  }
+
+  if (number.rooms === 100) {
+    rooms = 'комнат';
+  }
+
+  if (number.guests === 1) {
+    guests = 'гостя';
+  }
+
+  if (number.guests === 'не для гостей') {
+    return `${number.rooms} ${rooms} ${number.guests}`;
+  }
+
+  return `${number.rooms} ${rooms} для ${number.guests} ${guests}`;
+};
+
+const fillFeatures = (element, featuresData) => {
+  if (featuresData.length === 0) {
+    element.remove();
+
+    return false;
+  }
+
+  const featuresFragment = document.createDocumentFragment();
+
+  featuresData.forEach((feature) => {
+    const featureItem = document.createElement('li');
+
+    featureItem.classList.add('popup__feature');
+    featureItem.classList.add(`popup__feature--${feature}`);
+    featuresFragment.append(featureItem);
+  });
+
+  element.replaceChildren(featuresFragment);
+};
+
+const fillPhotos = (element, photosData) => {
+  if (photosData.length === 0) {
+    element.remove();
+
+    return false;
+  }
+
+  const photosFragment = document.createDocumentFragment();
+
+  photosData.forEach((photo) => {
+    const photoWidth = 45;
+    const photoHeight = 40;
+    const photoItem = document.createElement('img');
+
+    photoItem.classList.add ('popup__photo');
+    photoItem.setAttribute('width', photoWidth);
+    photoItem.setAttribute('height', photoHeight);
+    photoItem.setAttribute('alt', 'Фотография жилья');
+    photoItem.src = photo;
+
+    photosFragment.append(photoItem);
+  });
+
+  element.replaceChildren(photosFragment);
+};
+
 const prepareCards = (cardsData) => {
   const {author, offer} = cardsData;
 
@@ -19,56 +129,13 @@ const prepareCards = (cardsData) => {
   const features = tempCard.querySelector('.popup__features');
   const photos = tempCard.querySelector('.popup__photos');
 
-  const getTextContent = (element, property, textContent) => {
-    if (property.length === 0) {
-      element.remove();
-
-      return false;
-    }
-
-    element.textContent = textContent;
-  };
-
-  const getTextContentTwoProperties = (element, propertyOne, propertyTwo, textContent) => {
-    if (propertyOne.length === 0 || propertyTwo.length === 0) {
-      element.remove();
-
-      return false;
-    }
-
-    element.textContent = textContent;
-  };
-
-  getTextContent(title, offer.title, offer.title);
-  getTextContent(type, offer.type, offer.type);
-  getTextContent(description, offer.description, offer.description);
-  getTextContent(address, offer.address, offer.address);
-  getTextContentTwoProperties(time, offer.checkin, offer.checkout, `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
-
-  const setElementSrc = (element, srcData) => {
-    if (element.length === 0) {
-      element.remove();
-
-      return false;
-    }
-
-    element.src = srcData;
-  };
-
-  setElementSrc(avatar, `${author.avatar}`);
-
-  const getPrice = (priceData) => {
-    if (priceData.length === 0) {
-      price.remove();
-
-      return false;
-    }
-
-    price.textContent = `${offer.price} `;
-    price.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
-  };
-
-  getPrice(offer.price);
+  fillTextContent(title, offer.title, offer.title);
+  fillTextContent(type, offer.type, offer.type);
+  fillTextContent(description, offer.description, offer.description);
+  fillTextContent(address, offer.address, offer.address);
+  fillTextContentTwoProperties(time, offer.checkin, offer.checkout, `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
+  fillElementSrc(avatar, `${author.avatar}`);
+  fillPrice(offer.price);
 
   switch (offer.type) {
     case 'flat':
@@ -90,80 +157,9 @@ const prepareCards = (cardsData) => {
       throw new Error ('Такого типа жилой площади нет');
   }
 
-  const getCapacity = (number) => {
-    let rooms = 'комнаты';
-    let guests = 'гостей';
-
-    if (number.rooms === 1) {
-      rooms = 'комната';
-    }
-
-    if (number.rooms === 100) {
-      rooms = 'комнат';
-    }
-
-    if (number.guests === 1) {
-      guests = 'гостя';
-    }
-
-    if (number.guests === 'не для гостей') {
-      return `${number.rooms} ${rooms} ${number.guests}`;
-    }
-
-    return `${number.rooms} ${rooms} для ${number.guests} ${guests}`;
-  };
-
-  getTextContentTwoProperties(capacity, offer.rooms, offer.guests, getCapacity(offer));
-
-  const getFeatures = (element, featuresData) => {
-    if (featuresData.length === 0) {
-      element.remove();
-
-      return false;
-    }
-
-    const featuresFragment = document.createDocumentFragment();
-
-    featuresData.forEach((feature) => {
-      const featureItem = document.createElement('li');
-
-      featureItem.classList.add('popup__feature');
-      featureItem.classList.add(`popup__feature--${feature}`);
-      featuresFragment.append(featureItem);
-    });
-
-    element.replaceChildren(featuresFragment);
-  };
-
-  getFeatures(features, offer.features);
-
-  const getPhotos = (element, photosData) => {
-    if (photosData.length === 0) {
-      element.remove();
-
-      return false;
-    }
-
-    const photosFragment = document.createDocumentFragment();
-
-    photosData.forEach((photo) => {
-      const photoWidth = 45;
-      const photoHeigth = 40;
-      const photoItem = document.createElement('img');
-
-      photoItem.classList.add ('popup__photo');
-      photoItem.setAttribute.width = photoWidth;
-      photoItem.setAttribute.heigth = photoHeigth;
-      photoItem.setAttribute.alt = 'Фотография жилья';
-      photoItem.src = photo;
-
-      photosFragment.append(photoItem);
-    });
-
-    element.replaceChildren(photosFragment);
-  };
-
-  getPhotos(photos, offer.photos);
+  fillTextContentTwoProperties(capacity, offer.rooms, offer.guests, fillCapacity(offer));
+  fillFeatures(features, offer.features);
+  fillPhotos(photos, offer.photos);
 
   return tempCard;
 };
@@ -175,8 +171,10 @@ const renderCard = (card) => {
   mapCanvas.appendChild(readyCard);
 };
 
-const cards = offers.forEach((card) => {
-  renderCard(card);
-});
+const renderCards = (cardsData) => {
+  cardsData.forEach((card => {
+    renderCard(card);
+  }))
+};
 
-export {cards};
+renderCards(offers);

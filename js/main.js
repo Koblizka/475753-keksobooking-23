@@ -1,5 +1,5 @@
 import {offers} from './data.js';
-import {cards} from './card.js';
+// я ведь правильно понимаю, что нужно импортить card таким образом. Так как тут у нас сайд-эффект и это рендер карточки?
+import './card.js';
 
 offers;
-cards;
