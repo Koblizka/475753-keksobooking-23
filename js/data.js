@@ -22,6 +22,7 @@ const OFFER_TITLES = [
   'Без клопов',
   'С клопами, зато какая',
   'Продам гараж',
+  '',
 ];
 const OFFER_TYPES = [
   'palace',
