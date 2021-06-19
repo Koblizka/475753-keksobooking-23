@@ -2,6 +2,14 @@ import {offers} from './data.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
+const livingSpaceTypes = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
+};
+
 const fillTextContent = (element, property, textContent) => {
   if (property.length === 0) {
     element.remove();
@@ -32,15 +40,15 @@ const fillElementSrc = (element, srcData) => {
   element.src = srcData;
 };
 
-const fillPrice = (priceData) => {
+const fillPrice = (element, priceData) => {
   if (priceData.length === 0) {
-    price.remove();
+    element.remove();
 
     return false;
   }
 
-  price.textContent = `${priceData.price} `;
-  price.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
+  element.textContent = `${priceData} `;
+  element.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
 };
 
 const fillCapacity = (number) => {
@@ -66,50 +74,43 @@ const fillCapacity = (number) => {
   return `${number.rooms} ${rooms} для ${number.guests} ${guests}`;
 };
 
-const fillFeatures = (element, featuresData) => {
-  if (featuresData.length === 0) {
-    element.remove();
+const getFeatureElement = (featureData) => {
+  const featureElement = document.createElement('li');
 
-    return false;
-  }
+  featureElement.classList.add('popup__feature');
+  featureElement.classList.add(`popup__feature--${featureData}`);
 
-  const featuresFragment = document.createDocumentFragment();
-
-  featuresData.forEach((feature) => {
-    const featureItem = document.createElement('li');
-
-    featureItem.classList.add('popup__feature');
-    featureItem.classList.add(`popup__feature--${feature}`);
-    featuresFragment.append(featureItem);
-  });
-
-  element.replaceChildren(featuresFragment);
+  return featureElement;
 };
 
-const fillPhotos = (element, photosData) => {
-  if (photosData.length === 0) {
+const getPhotoElement = (photoData) => {
+  const photoWidth = 45;
+  const photoHeight = 40;
+  const photoItem = document.createElement('img');
+
+  photoItem.classList.add ('popup__photo');
+  photoItem.setAttribute('width', photoWidth);
+  photoItem.setAttribute('height', photoHeight);
+  photoItem.setAttribute('alt', 'Фотография жилья');
+  photoItem.src = photoData;
+
+  return photoItem;
+};
+
+const fillBunchElements = (element, elementsData, elementFunction) => {
+  if (elementsData.length === 0) {
     element.remove();
 
     return false;
   }
 
-  const photosFragment = document.createDocumentFragment();
+  const elementsFragment = document.createDocumentFragment();
 
-  photosData.forEach((photo) => {
-    const photoWidth = 45;
-    const photoHeight = 40;
-    const photoItem = document.createElement('img');
-
-    photoItem.classList.add ('popup__photo');
-    photoItem.setAttribute('width', photoWidth);
-    photoItem.setAttribute('height', photoHeight);
-    photoItem.setAttribute('alt', 'Фотография жилья');
-    photoItem.src = photo;
-
-    photosFragment.append(photoItem);
+  elementsData.forEach((item) => {
+    elementsFragment.append(elementFunction(item));
   });
 
-  element.replaceChildren(photosFragment);
+  element.replaceChildren(elementsFragment);
 };
 
 const prepareCards = (cardsData) => {
@@ -135,46 +136,28 @@ const prepareCards = (cardsData) => {
   fillTextContent(address, offer.address, offer.address);
   fillTextContentTwoProperties(time, offer.checkin, offer.checkout, `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
   fillElementSrc(avatar, `${author.avatar}`);
-  fillPrice(offer.price);
+  fillPrice(price, offer.price);
 
-  switch (offer.type) {
-    case 'flat':
-      livingSpace.textContent = 'Квартира';
-      break;
-    case 'bungalow':
-      livingSpace.textContent = 'Бунгало';
-      break;
-    case 'hotel':
-      livingSpace.textContent = 'Отель';
-      break;
-    case 'house':
-      livingSpace.textContent = 'Дом';
-      break;
-    case 'palace':
-      livingSpace.textContent = 'Дворец';
-      break;
-    default:
-      throw new Error ('Такого типа жилой площади нет');
-  }
+  livingSpace.textContent = livingSpaceTypes[offer.type];
 
   fillTextContentTwoProperties(capacity, offer.rooms, offer.guests, fillCapacity(offer));
-  fillFeatures(features, offer.features);
-  fillPhotos(photos, offer.photos);
+  fillBunchElements(features, offer.features, getFeatureElement);
+  fillBunchElements(photos, offer.photos, getPhotoElement);
 
   return tempCard;
 };
 
-const renderCard = (card) => {
+const renderOneCard = (card) => {
   const mapCanvas = document.querySelector('#map-canvas');
   const readyCard = prepareCards(card);
 
   mapCanvas.appendChild(readyCard);
 };
 
-const renderCards = (cardsData) => {
-  cardsData.forEach((card => {
-    renderCard(card);
-  }))
+const renderAllCards = (cardsData) => {
+  cardsData.forEach((card) => {
+    renderOneCard(card);
+  });
 };
 
-renderCards(offers);
+renderAllCards(offers);
