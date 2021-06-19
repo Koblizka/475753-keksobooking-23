@@ -3,7 +3,7 @@ const adForm = document.querySelector('.ad-form');
 const adFormInputs = adForm.querySelectorAll('fieldset');
 
 const disablePage = (isTrue) => {
-  if (isTrue === true) {
+  if (isTrue) {
     adForm.classList.add('ad-form--disabled');
 
     adFormInputs.forEach((item) => {
