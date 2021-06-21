@@ -13,14 +13,12 @@ const setFormState = (formItems, isActivate) => {
       item.removeAttribute('disabled');
     });
 
-    return true;
+    return;
   }
 
   formItems.forEach((item) => {
     item.setAttribute('disabled', '');
   });
-
-  return false;
 };
 
 const setPageState = (isActive) => {
@@ -28,14 +26,12 @@ const setPageState = (isActive) => {
     adForm.classList.remove('ad-form--disabled');
     setFormState(adFormFieldsets, state.active);
     setFormState(mapFiltersInputs, state.active);
-    return true;
+    return;
   }
 
   adForm.classList.add('ad-form--disabled');
   setFormState(adFormFieldsets, state.deactive);
   setFormState(mapFiltersInputs, state.deactive);
-
-  return false;
 };
 
 setPageState(state.deactive);
