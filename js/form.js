@@ -21,5 +21,85 @@ const disablePage = (isTrue) => {
 // disablePage(true);
 
 const adFormTitle = adForm.title;
-console.log(adFormTitle);
+const adFormPrice = adForm.price;
+const adFormRooms = adForm.rooms;
+const adFormCapacity = adForm.capacity;
+const maxPrice = 1000000;
+const roomsCapacity = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
+const titleLength = {
+  min: 30,
+  max: 100,
+};
 
+const inputValidity = (input) => {
+  if (input.validity.tooShort) {
+    input.setCustomValidity(`Минимальная длина должна быть ${titleLength.min} символов. Нужно ввести ещё ${titleLength.min - input.value.length}`);
+  } else if (input.validity.tooLong) {
+    input.setCustomValidity(`Максимальная длина на может быть больше чем ${titleLength.max} символов. Нужно удалить ещё ${input.value.length - titleLength.max}`);
+  } else {
+    input.setCustomValidity('');
+  }
+
+  input.reportValidity();
+};
+
+const onTitleInput = () => {
+  inputValidity(adFormTitle);
+};
+
+const priceValidity = (price) => {
+  if (price.value.length > maxPrice) {
+    price.setCustomValidity(`Укажите цену, которая не должна быть больше ${maxPrice}`);
+  } else {
+    price.setCustomValidity('');
+  }
+
+  price.reportValidity();
+};
+
+const onPriceInput = () => {
+  priceValidity(adFormPrice);
+};
+
+const roomsValidity = (roomsQuantity) => {
+  if (roomsQuantity === 1) {
+    return '1 комната — «для 1 гостя»';
+  }
+
+  if (roomsQuantity === 2 || roomsQuantity === 3) {
+    return `${roomsQuantity} комнаты — «для 2 гостей» или «для 1 гостя`;
+  }
+
+  if (roomsQuantity === 100) {
+    return `${roomsQuantity} комнат — «не для гостей»`;
+  }
+
+  return `${roomsQuantity} комнат — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`;
+};
+
+const checkRoomCapacity = (rooms, guests, evt) => {
+  const roomsValue = Number(rooms.value);
+  const guestsValue = Number(guests.value);
+
+  if (!roomsCapacity[roomsValue].includes(guestsValue)) {
+    evt.target.setCustomValidity(roomsValidity(roomsValue));
+  } else {
+    evt.target.setCustomValidity('');
+  }
+
+  evt.target.reportValidity();
+};
+
+const onCapacityChange = (evt) => {
+  checkRoomCapacity(adFormRooms, adFormCapacity, evt);
+};
+
+adFormRooms.addEventListener('change', onCapacityChange);
+adFormCapacity.addEventListener('change', onCapacityChange);
+adFormTitle.addEventListener('input', onTitleInput);
+adFormPrice.addEventListener('input', onPriceInput);
