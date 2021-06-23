@@ -1,27 +1,29 @@
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFiltersInputs = document.querySelector('.map__filters').querySelectorAll('[class^=map__]');
+const capacityOptions = adForm.capacity.querySelectorAll('option');
 
-const adFormTitle = adForm.title;
-const adFormPrice = adForm.price;
-const adFormRooms = adForm.rooms;
-const adFormCapacity = adForm.capacity;
-const maxPrice = 1000000;
+const {
+  title,
+  price,
+  rooms: room,
+} = adForm;
 
 const state = {
   active: true,
   deactive: false,
 };
-const roomsCapacity = {
+const RoomsCapacity = {
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
   100: [0],
 };
-const titleLength = {
-  min: 30,
-  max: 100,
+const TitleLength = {
+  MIN: 30,
+  MAX: 100,
 };
+const maxPrice = 1000000;
 
 const setFormState = (formItems, isActivate) => {
   if (isActivate) {
@@ -50,72 +52,63 @@ const setPageState = (isActive) => {
   setFormState(mapFiltersInputs, state.deactive);
 };
 
-setPageState(state.deactive);
-
-const inputValidity = (input) => {
-  if (input.validity.tooShort) {
-    input.setCustomValidity(`Минимальная длина должна быть ${titleLength.min} символов. Нужно ввести ещё ${titleLength.min - input.value.length}`);
-  } else if (input.validity.tooLong) {
-    input.setCustomValidity(`Максимальная длина на может быть больше чем ${titleLength.max} символов. Нужно удалить ещё ${input.value.length - titleLength.max}`);
+const titleValidity = (titleInput) => {
+  if (titleInput.validity.tooShort) {
+    titleInput.setCustomValidity(`Минимальная длина должна быть ${TitleLength.min} символов. Нужно ввести ещё ${TitleLength.MIN - titleInput.value.length}`);
+  } else if (titleInput.validity.tooLong) {
+    titleInput.setCustomValidity(`Максимальная длина на может быть больше чем ${TitleLength.MAX} символов. Нужно удалить ещё ${titleInput.value.length - TitleLength.MAX}`);
   } else {
-    input.setCustomValidity('');
+    titleInput.setCustomValidity('');
   }
 
-  input.reportValidity();
+  titleInput.reportValidity();
 };
 
-const priceValidity = (price) => {
-  if (price.value.length > maxPrice) {
-    price.setCustomValidity(`Укажите цену, которая не должна быть больше ${maxPrice}`);
+const priceValidity = (priceInput) => {
+  if (priceInput.value.length > maxPrice) {
+    priceInput.setCustomValidity(`Укажите цену, которая не должна быть больше ${maxPrice}`);
   } else {
-    price.setCustomValidity('');
+    priceInput.setCustomValidity('');
   }
 
-  price.reportValidity();
+  priceInput.reportValidity();
 };
 
-const roomsValidity = (roomsQuantity) => {
-  if (roomsQuantity === 1) {
-    return '1 комната — «для 1 гостя»';
-  }
-
-  if (roomsQuantity === 2 || roomsQuantity === 3) {
-    return `${roomsQuantity} комнаты — «для 2 гостей» или «для 1 гостя`;
-  }
-
-  if (roomsQuantity === 100) {
-    return `${roomsQuantity} комнат — «не для гостей»`;
-  }
-
-  return `${roomsQuantity} комнат — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`;
+const disableCapacityOptions = () => {
+  capacityOptions.forEach((option) => {
+    option.disabled = true;
+  });
 };
 
-const checkRoomCapacity = (rooms, guests, evt) => {
-  const roomsValue = Number(rooms.value);
-  const guestsValue = Number(guests.value);
-
-  if (!roomsCapacity[roomsValue].includes(guestsValue)) {
-    evt.target.setCustomValidity(roomsValidity(roomsValue));
-  } else {
-    evt.target.setCustomValidity('');
-  }
-
-  evt.target.reportValidity();
-};
-
-const onCapacityChange = (evt) => {
-  checkRoomCapacity(adFormRooms, adFormCapacity, evt);
+const changeRoomCapacity = (roomCapacity) => {
+  RoomsCapacity[roomCapacity].forEach((roomAmount) => {
+    capacityOptions.forEach((option) => {
+      if (Number(option.value) === roomAmount) {
+        option.disabled = false;
+        option.selected = true;
+      }
+    });
+  });
 };
 
 const onPriceInput = () => {
-  priceValidity(adFormPrice);
+  priceValidity(price);
 };
 
 const onTitleInput = () => {
-  inputValidity(adFormTitle);
+  titleValidity(title);
 };
 
-adFormRooms.addEventListener('change', onCapacityChange);
-adFormCapacity.addEventListener('change', onCapacityChange);
-adFormTitle.addEventListener('input', onTitleInput);
-adFormPrice.addEventListener('input', onPriceInput);
+const onRoomsChange = (evt) => {
+  disableCapacityOptions();
+
+  changeRoomCapacity(evt.target.value);
+};
+
+title.addEventListener('input', onTitleInput);
+room.addEventListener('change', onRoomsChange );
+price.addEventListener('input', onPriceInput);
+
+setPageState(state.active);
+disableCapacityOptions();
+changeRoomCapacity(room.value);
