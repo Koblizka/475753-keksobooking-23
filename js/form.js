@@ -6,8 +6,18 @@ const adFormTitle = adForm.title;
 const adFormPrice = adForm.price;
 const adFormRooms = adForm.rooms;
 const adFormCapacity = adForm.capacity;
-const maxPrice = 1000000;
+const adFormType = adForm.type;
+const adFormTimein = adForm.timein;
+const adFormTimeout = adForm.timeout;
 
+const prices = {
+  max: 1000000,
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
 const state = {
   active: true,
   deactive: false,
@@ -50,7 +60,7 @@ const setPageState = (isActive) => {
   setFormState(mapFiltersInputs, state.deactive);
 };
 
-setPageState(state.deactive);
+setPageState(state.active);
 
 const inputValidity = (input) => {
   if (input.validity.tooShort) {
@@ -65,15 +75,17 @@ const inputValidity = (input) => {
 };
 
 const priceValidity = (price) => {
-  if (price.value.length > maxPrice) {
-    price.setCustomValidity(`Укажите цену, которая не должна быть больше ${maxPrice}`);
+  if (price.validity.rangeOverflow) {
+    price.setCustomValidity(`Укажите цену, которая не должна быть больше ${prices.max}`);
+  } else if (price.validity.rangeUnderflow) {
+    price.setCustomValidity(`Цена за ночь не может быть меньше, чем ${prices[adFormType.value]}`);
   } else {
     price.setCustomValidity('');
   }
 
   price.reportValidity();
 };
-
+// Добавить функицю для гостей
 const roomsValidity = (roomsQuantity) => {
   if (roomsQuantity === 1) {
     return '1 комната — «для 1 гостя»';
@@ -89,25 +101,31 @@ const roomsValidity = (roomsQuantity) => {
 
   return `${roomsQuantity} комнат — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`;
 };
-
-const checkRoomCapacity = (rooms, guests, evt) => {
-  const roomsValue = Number(rooms.value);
-  const guestsValue = Number(guests.value);
+// Поправить для гостей и комнат
+const checkRoomCapacity = (eventElement) => {
+  const roomsValue = Number(adFormRooms.value);
+  const guestsValue = Number(adFormCapacity.value);
 
   if (!roomsCapacity[roomsValue].includes(guestsValue)) {
-    evt.target.setCustomValidity(roomsValidity(roomsValue));
+    eventElement.setCustomValidity(roomsValidity(roomsValue));
   } else {
-    evt.target.setCustomValidity('');
+    eventElement.setCustomValidity('');
   }
 
-  evt.target.reportValidity();
+  eventElement.reportValidity();
+};
+// Подумать над тем как вызвать, чтобы сработала валидация сразу
+const onCapacityChange = () => {
+  checkRoomCapacity(adFormRooms);
+  checkRoomCapacity(adFormCapacity);
 };
 
-const onCapacityChange = (evt) => {
-  checkRoomCapacity(adFormRooms, adFormCapacity, evt);
+const onTypeChange = () => {
+  adFormPrice.setAttribute('min', `${prices[adFormType.value]}`);
 };
 
 const onPriceInput = () => {
+  onTypeChange();
   priceValidity(adFormPrice);
 };
 
@@ -115,7 +133,18 @@ const onTitleInput = () => {
   inputValidity(adFormTitle);
 };
 
+const onTimeinChange = (evt) => {
+  adFormTimeout.value = evt.target.value;
+};
+
+const onTimeoutChange = (evt) => {
+  adFormTimein.value = evt.target.value;
+};
+
 adFormRooms.addEventListener('change', onCapacityChange);
 adFormCapacity.addEventListener('change', onCapacityChange);
 adFormTitle.addEventListener('input', onTitleInput);
+adFormType.addEventListener('change', onTypeChange);
 adFormPrice.addEventListener('input', onPriceInput);
+adFormTimein.addEventListener('change', onTimeinChange);
+adFormTimeout.addEventListener('change', onTimeoutChange);
