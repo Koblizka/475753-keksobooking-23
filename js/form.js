@@ -112,3 +112,4 @@ price.addEventListener('input', onPriceInput);
 setPageState(state.active);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
+// для теста публикации на ГХ
