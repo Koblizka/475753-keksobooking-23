@@ -54,7 +54,7 @@ const setPageState = (isActive) => {
 
 const titleValidity = (titleInput) => {
   if (titleInput.validity.tooShort) {
-    titleInput.setCustomValidity(`Минимальная длина должна быть ${TitleLength.min} символов. Нужно ввести ещё ${TitleLength.MIN - titleInput.value.length}`);
+    titleInput.setCustomValidity(`Минимальная длина должна быть ${TitleLength.MIN} символов. Нужно ввести ещё ${TitleLength.MIN - titleInput.value.length}`);
   } else if (titleInput.validity.tooLong) {
     titleInput.setCustomValidity(`Максимальная длина на может быть больше чем ${TitleLength.MAX} символов. Нужно удалить ещё ${titleInput.value.length - TitleLength.MAX}`);
   } else {
@@ -112,4 +112,3 @@ price.addEventListener('input', onPriceInput);
 setPageState(state.active);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
-// для теста публикации на ГХ
