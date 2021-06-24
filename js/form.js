@@ -7,13 +7,16 @@ const {
   title,
   price,
   rooms: room,
+  type,
+  timein,
+  timeout,
 } = adForm;
 
 const state = {
   active: true,
   deactive: false,
 };
-const RoomsCapacity = {
+const roomsCapacity = {
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
@@ -23,7 +26,14 @@ const TitleLength = {
   MIN: 30,
   MAX: 100,
 };
-const maxPrice = 1000000;
+const prices =  {
+  max: 1000000,
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
 
 const setFormState = (formItems, isActivate) => {
   if (isActivate) {
@@ -65,13 +75,15 @@ const titleValidity = (titleInput) => {
 };
 
 const priceValidity = (priceInput) => {
-  if (priceInput.value.length > maxPrice) {
-    priceInput.setCustomValidity(`Укажите цену, которая не должна быть больше ${maxPrice}`);
+  if (priceInput.validity.rangeOverflow) {
+    priceInput.setCustomValidity(`Укажите цену, которая не должна быть больше ${prices.max}`);
+  } else if (priceInput.validity.rangeUnderflow) {
+    priceInput.setCustomValidity(`Цена за ночь не может быть меньше, чем ${prices[type.value]}`);
   } else {
     priceInput.setCustomValidity('');
   }
 
-  priceInput.reportValidity();
+  price.reportValidity();
 };
 
 const disableCapacityOptions = () => {
@@ -81,7 +93,7 @@ const disableCapacityOptions = () => {
 };
 
 const changeRoomCapacity = (roomCapacity) => {
-  RoomsCapacity[roomCapacity].forEach((roomAmount) => {
+  roomsCapacity[roomCapacity].forEach((roomAmount) => {
     capacityOptions.forEach((option) => {
       if (Number(option.value) === roomAmount) {
         option.disabled = false;
@@ -91,7 +103,12 @@ const changeRoomCapacity = (roomCapacity) => {
   });
 };
 
+const onTypeChange = () => {
+  price.setAttribute('min', `${prices[type.value]}`);
+};
+
 const onPriceInput = () => {
+  onTypeChange();
   priceValidity(price);
 };
 
@@ -105,9 +122,20 @@ const onRoomsChange = (evt) => {
   changeRoomCapacity(evt.target.value);
 };
 
+const onTimeinChange = (evt) => {
+  timeout.value = evt.target.value;
+};
+
+const onTimeoutChange = (evt) => {
+  timein.value = evt.target.value;
+};
+
 title.addEventListener('input', onTitleInput);
-room.addEventListener('change', onRoomsChange );
+room.addEventListener('change', onRoomsChange);
 price.addEventListener('input', onPriceInput);
+type.addEventListener('change', onTypeChange);
+timein.addEventListener('change', onTimeinChange);
+timeout.addEventListener('change', onTimeoutChange);
 
 setPageState(state.active);
 disableCapacityOptions();
