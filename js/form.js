@@ -130,9 +130,8 @@ const onTimeoutChange = (evt) => {
   timein.value = evt.target.value;
 };
 
-
 title.addEventListener('input', onTitleInput);
-room.addEventListener('change', onRoomsChange );
+room.addEventListener('change', onRoomsChange);
 price.addEventListener('input', onPriceInput);
 type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
