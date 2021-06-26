@@ -44,7 +44,7 @@ const pinMarker = L.icon({
 const placeOneOfferOnMap = (offer) => {
   L.marker([offer.location.lat, offer.location.lng], {
     icon: pinMarker,
-    title: offer.title,
+    title: offer.offer.title,
   }).addTo(map)
     .bindPopup(
       prepareCards(offer),
