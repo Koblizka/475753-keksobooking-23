@@ -10,6 +10,7 @@ const {
   type,
   timein,
   timeout,
+  address,
 } = adForm;
 
 const state = {
@@ -103,6 +104,10 @@ const changeRoomCapacity = (roomCapacity) => {
   });
 };
 
+const setAddress = ({lat, lng}) => {
+  address.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+};
+
 const onTypeChange = () => {
   price.setAttribute('min', `${prices[type.value]}`);
 };
@@ -137,6 +142,8 @@ type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
 
-setPageState(state.active);
+setPageState(state.deactive);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
+
+export {setPageState, setAddress};
