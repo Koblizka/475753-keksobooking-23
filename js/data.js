@@ -77,6 +77,11 @@ const OFFER_CAPACITY = [
   3,
   'не для гостей',
 ];
+const PageState = {
+  ACTIVE_STATE: 'active',
+  DEACTIVE_STATE: 'deactive',
+};
+
 
 const getOffer = () => {
   const locationX = util.getRandomFloat(35.65000, 35.70000, 5);
@@ -120,5 +125,6 @@ export {
   OfferPriceRange,
   OFFER_ROOM_AMOUNTS,
   OFFER_CAPACITY,
+  PageState,
   offers
 };

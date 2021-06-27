@@ -1,3 +1,5 @@
+import {PageState} from './data';
+
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFiltersInputs = document.querySelector('.map__filters').querySelectorAll('[class^=map__]');
@@ -13,10 +15,6 @@ const {
   address,
 } = adForm;
 
-const state = {
-  active: true,
-  deactive: false,
-};
 const roomsCapacity = {
   1: [1],
   2: [1, 2],
@@ -37,7 +35,7 @@ const prices =  {
 };
 
 const setFormState = (formItems, isActivate) => {
-  if (isActivate) {
+  if (isActivate === 'active') {
     formItems.forEach((item) => {
       item.removeAttribute('disabled');
     });
@@ -53,14 +51,14 @@ const setFormState = (formItems, isActivate) => {
 const setPageState = (isActive) => {
   if (isActive) {
     adForm.classList.remove('ad-form--disabled');
-    setFormState(adFormFieldsets, state.active);
-    setFormState(mapFiltersInputs, state.active);
+    setFormState(adFormFieldsets, PageState.ACTIVE_STATE);
+    setFormState(mapFiltersInputs, PageState.ACTIVE_STATE);
     return;
   }
 
   adForm.classList.add('ad-form--disabled');
-  setFormState(adFormFieldsets, state.deactive);
-  setFormState(mapFiltersInputs, state.deactive);
+  setFormState(adFormFieldsets, PageState.DEACTIVE_STATE);
+  setFormState(mapFiltersInputs, PageState.DEACTIVE_STATE);
 };
 
 const titleValidity = (titleInput) => {
@@ -142,7 +140,7 @@ type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
 
-setPageState(state.deactive);
+setPageState(PageState.DEACTIVE_STATE);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
 
