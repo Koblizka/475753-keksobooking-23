@@ -1,5 +1,3 @@
-import {offers} from './data.js';
-
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const livingSpaceTypes = {
@@ -147,17 +145,4 @@ const prepareCards = (cardsData) => {
   return tempCard;
 };
 
-const renderOneCard = (card) => {
-  const mapCanvas = document.querySelector('#map-canvas');
-  const readyCard = prepareCards(card);
-
-  mapCanvas.appendChild(readyCard);
-};
-
-const renderAllCards = (cardsData) => {
-  cardsData.forEach((card) => {
-    renderOneCard(card);
-  });
-};
-
-renderAllCards(offers);
+export {prepareCards};
