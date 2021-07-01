@@ -1,6 +1,7 @@
-import {offers} from './data.js';
+import {getOffersData} from './api.js';
 import {placeAllOffersOnMap} from './map.js';
+import {makeFailureMessage} from './utils.js';
 import './card.js';
 import './form.js';
 
-placeAllOffersOnMap(offers);
+getOffersData(placeAllOffersOnMap, makeFailureMessage);

@@ -1,9 +1,16 @@
-import {PageState} from './data';
+import {PageState} from './data.js';
+import {sendForm} from './api.js';
+import {TokyoCenter, mainPinMarker} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFiltersInputs = document.querySelector('.map__filters').querySelectorAll('[class^=map__]');
 const capacityOptions = adForm.capacity.querySelectorAll('option');
+const adFormResetButton = adForm.querySelector('.ad-form__reset');
+
+const templateSuccessModal = document.querySelector('#success').content.querySelector('.success');
+const templateErrorModal = document.querySelector('#error').content.querySelector('.error');
+
 
 const {
   title,
@@ -133,12 +140,82 @@ const onTimeoutChange = (evt) => {
   timein.value = evt.target.value;
 };
 
+const resetAdForm = () => {
+  adForm.reset();
+  setAddress(TokyoCenter);
+  mainPinMarker.setLatLng(TokyoCenter);
+};
+
+const closeModal = (modalElement) => {
+  const onClose = (evt) => {
+    evt.preventDefault();
+
+    if (evt.key === 'Escape' || evt.button === 0) {
+      modalElement.remove();
+
+      document.removeEventListener('keydown', onClose);
+      document.removeEventListener('click', onClose);
+    }
+  };
+
+  document.addEventListener('click', onClose);
+  document.addEventListener('keydown', onClose);
+};
+
+const closeModalOnButton = (buttonElement) => {
+  const onButtonClick = (evt) => {
+    evt.preventDefault();
+
+    buttonElement.remove();
+
+    buttonElement.querySelector('button').removeEventListener('click', onButtonClick);
+  };
+
+  buttonElement.querySelector('button').addEventListener('click', onButtonClick);
+};
+
+const showSuccessModal = () => {
+  const cloneSuccessModal = templateSuccessModal.cloneNode(true);
+
+  closeModal(cloneSuccessModal);
+  document.body.insertAdjacentElement('beforeend', cloneSuccessModal);
+
+  resetAdForm();
+};
+
+const showFailedModal = () => {
+  const cloneErrorModal = templateErrorModal.cloneNode(true);
+
+  closeModal(cloneErrorModal);
+  closeModalOnButton(cloneErrorModal);
+
+  document.body.insertAdjacentElement('beforeend', cloneErrorModal);
+};
+
+const onSubmit = (evt) => {
+  evt.preventDefault();
+
+  sendForm(
+    showSuccessModal,
+    showFailedModal,
+    new FormData(adForm),
+  );
+};
+
+const onRestButtonClick = (evt) => {
+  evt.preventDefault();
+
+  resetAdForm();
+};
+
 title.addEventListener('input', onTitleInput);
 room.addEventListener('change', onRoomsChange);
 price.addEventListener('input', onPriceInput);
 type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
+adForm.addEventListener('submit', onSubmit);
+adFormResetButton.addEventListener('click', onRestButtonClick);
 
 setPageState(PageState.DEACTIVE_STATE);
 disableCapacityOptions();
