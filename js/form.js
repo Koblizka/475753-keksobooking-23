@@ -41,6 +41,13 @@ const prices =  {
   palace: 10000,
 };
 
+const ModalState = {
+  FAIL: 'fail',
+  SUCCESS: 'success',
+};
+
+const leftMouseButton = 0;
+
 const setFormState = (formItems, isActivate) => {
   if (isActivate === 'active') {
     formItems.forEach((item) => {
@@ -150,7 +157,7 @@ const closeModal = (modalElement) => {
   const onClose = (evt) => {
     evt.preventDefault();
 
-    if (evt.key === 'Escape' || evt.button === 0) {
+    if (evt.key === 'Escape' || evt.button === leftMouseButton) {
       modalElement.remove();
 
       document.removeEventListener('keydown', onClose);
@@ -174,30 +181,27 @@ const closeModalOnButton = (buttonElement) => {
   buttonElement.querySelector('button').addEventListener('click', onButtonClick);
 };
 
-const showSuccessModal = () => {
-  const cloneSuccessModal = templateSuccessModal.cloneNode(true);
+const showModal = (modalState, modalTemplate) => {
+  const modal = modalTemplate.cloneNode(true);
 
-  closeModal(cloneSuccessModal);
-  document.body.insertAdjacentElement('beforeend', cloneSuccessModal);
+  closeModal(modal);
+  document.body.insertAdjacentElement('beforeend', modal);
 
-  resetAdForm();
-};
+  if (modalState === 'fail') {
+    closeModalOnButton(modal);
+  }
 
-const showFailedModal = () => {
-  const cloneErrorModal = templateErrorModal.cloneNode(true);
-
-  closeModal(cloneErrorModal);
-  closeModalOnButton(cloneErrorModal);
-
-  document.body.insertAdjacentElement('beforeend', cloneErrorModal);
+  if (modalState === 'success') {
+    resetAdForm();
+  }
 };
 
 const onSubmit = (evt) => {
   evt.preventDefault();
 
   sendForm(
-    showSuccessModal,
-    showFailedModal,
+    showModal(ModalState.SUCCESS, templateSuccessModal),
+    showModal((ModalState.FAIL, templateErrorModal)),
     new FormData(adForm),
   );
 };
