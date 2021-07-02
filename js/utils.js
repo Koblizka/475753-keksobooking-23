@@ -60,55 +60,10 @@ const getRandomBunchArrayElements = (features) => {
   return features.slice(0, getRandomInteger(0, features.length));
 };
 
-const makeFailureMessage = (statusName, statusMessage) => {
-  const element = document.createElement('div');
-  const header = document.createElement('h3');
-  const paragraph = document.createElement('p');
-  const button = document.createElement('button');
-
-  element.style.position = 'absolute';
-  element.style.top = '50%';
-  element.style.left = '50%';
-  element.style.transform = 'translate(-50%, -50%)';
-  element.style.zIndex = 1000;
-  element.style.padding = '20px 10px';
-  element.style.minWidth = '300px';
-  element.style.fontSize = '32px';
-  element.style.background = '#f0f0ea';
-  element.style.border = '2px solid pink';
-  element.style.borderRadius = '10px';
-  element.style.textAlign= 'center';
-
-  header.textContent = 'Не удалось выполнить запрос!';
-  paragraph.textContent = `${statusName} : ${statusMessage}`;
-
-  button.style.padding = '5px 10px';
-  button.style.background = 'white';
-  button.style.border = '2px solid';
-  button.style.borderRadius = '5px';
-  button.style.borderColor = 'pink';
-
-  button.textContent = 'Ясно, понятно';
-
-  element.insertAdjacentElement('afterbegin', paragraph);
-  element.insertAdjacentElement('afterbegin', header);
-  element.insertAdjacentElement('beforeend', button);
-
-
-  button.addEventListener('click', (evt) => {
-    evt.preventDefault();
-
-    element.remove();
-  });
-
-  document.body.append(element);
-};
-
 export {
   getRandomInteger,
   getRandomFloat,
   getRandomArrayElement,
   shuffle,
-  getRandomBunchArrayElements,
-  makeFailureMessage
+  getRandomBunchArrayElements
 };
