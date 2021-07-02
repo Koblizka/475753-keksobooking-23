@@ -1,14 +1,15 @@
+import {PageState} from './data.js';
 import {setPageState, setAddress} from './form.js';
 import {prepareCards} from './card.js';
 
 const TokyoCenter = {
-  lat:35.6938,
+  lat: 35.6938,
   lng: 139.7034,
 };
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    setPageState('active'); // <-- Норм ли так делать (передавать агрументом строку), ведь до этого я стейт задавал в модуле form с помощью отдельного объекта хронящего состояния. Но в плане логики выполнения строка даёт всегда «тру», и всё ок, а ок ли в плане читаеомсти и понятности, правильности? Может мне нужно экспортить этот объект?*
+    setPageState(PageState.ACTIVE_STATE);
   })
   .setView(TokyoCenter, 13);
 
@@ -59,4 +60,8 @@ const placeAllOffersOnMap = (offers) => {
   });
 };
 
-export {placeAllOffersOnMap};
+export {
+  placeAllOffersOnMap,
+  TokyoCenter,
+  mainPinMarker
+};
