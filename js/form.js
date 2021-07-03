@@ -1,9 +1,16 @@
-import {PageState} from './data';
+import {PageState} from './data.js';
+import {sendForm} from './api.js';
+import {TokyoCenter, mainPinMarker} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFiltersInputs = document.querySelector('.map__filters').querySelectorAll('[class^=map__]');
 const capacityOptions = adForm.capacity.querySelectorAll('option');
+const adFormResetButton = adForm.querySelector('.ad-form__reset');
+
+const templateSuccessModal = document.querySelector('#success').content.querySelector('.success');
+const templateErrorModal = document.querySelector('#error').content.querySelector('.error');
+
 
 const {
   title,
@@ -33,6 +40,13 @@ const prices =  {
   house: 5000,
   palace: 10000,
 };
+
+const ModalState = {
+  FAIL: 'fail',
+  SUCCESS: 'success',
+};
+
+const leftMouseButton = 0;
 
 const setFormState = (formItems, isActivate) => {
   if (isActivate === 'active') {
@@ -133,15 +147,126 @@ const onTimeoutChange = (evt) => {
   timein.value = evt.target.value;
 };
 
+const resetAdForm = () => {
+  adForm.reset();
+  setAddress(TokyoCenter);
+  mainPinMarker.setLatLng(TokyoCenter);
+};
+
+const makeFailureMessage = (statusName, statusMessage) => {
+  const element = document.createElement('div');
+  const header = document.createElement('h3');
+  const paragraph = document.createElement('p');
+  const button = document.createElement('button');
+
+  element.style.position = 'absolute';
+  element.style.top = '50%';
+  element.style.left = '50%';
+  element.style.transform = 'translate(-50%, -50%)';
+  element.style.zIndex = 1000;
+  element.style.padding = '20px 10px';
+  element.style.minWidth = '300px';
+  element.style.fontSize = '32px';
+  element.style.background = '#f0f0ea';
+  element.style.border = '2px solid pink';
+  element.style.borderRadius = '10px';
+  element.style.textAlign= 'center';
+
+  header.textContent = 'Не удалось выполнить запрос!';
+  paragraph.textContent = `${statusName} : ${statusMessage}`;
+
+  button.style.padding = '5px 10px';
+  button.style.background = 'white';
+  button.style.border = '2px solid';
+  button.style.borderRadius = '5px';
+  button.style.borderColor = 'pink';
+
+  button.textContent = 'Ясно, понятно';
+
+  element.insertAdjacentElement('afterbegin', paragraph);
+  element.insertAdjacentElement('afterbegin', header);
+  element.insertAdjacentElement('beforeend', button);
+
+
+  button.addEventListener('click', (evt) => {
+    evt.preventDefault();
+
+    element.remove();
+  });
+
+  document.body.append(element);
+};
+
+const closeModal = (modalElement) => {
+  const onClose = (evt) => {
+    evt.preventDefault();
+
+    if (evt.key === 'Escape' || evt.button === leftMouseButton) {
+      modalElement.remove();
+
+      document.removeEventListener('keydown', onClose);
+      document.removeEventListener('click', onClose);
+    }
+  };
+
+  document.addEventListener('click', onClose);
+  document.addEventListener('keydown', onClose);
+};
+
+const closeModalOnButton = (buttonElement) => {
+  const onButtonClick = (evt) => {
+    evt.preventDefault();
+
+    buttonElement.remove();
+
+    buttonElement.querySelector('button').removeEventListener('click', onButtonClick);
+  };
+
+  buttonElement.querySelector('button').addEventListener('click', onButtonClick);
+};
+
+const showModal = (modalState, modalTemplate) => {
+  const modal = modalTemplate.cloneNode(true);
+
+  closeModal(modal);
+  document.body.insertAdjacentElement('beforeend', modal);
+
+  if (modalState === 'fail') {
+    closeModalOnButton(modal);
+  }
+
+  if (modalState === 'success') {
+    resetAdForm();
+  }
+};
+
+const onSubmit = (evt) => {
+  evt.preventDefault();
+
+  sendForm(
+    showModal(ModalState.SUCCESS, templateSuccessModal),
+    showModal((ModalState.FAIL, templateErrorModal)),
+    new FormData(adForm),
+  );
+};
+
+const onRestButtonClick = (evt) => {
+  evt.preventDefault();
+
+  resetAdForm();
+};
+
 title.addEventListener('input', onTitleInput);
 room.addEventListener('change', onRoomsChange);
 price.addEventListener('input', onPriceInput);
 type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
+adForm.addEventListener('submit', onSubmit);
+adFormResetButton.addEventListener('click', onRestButtonClick);
 
 setPageState(PageState.DEACTIVE_STATE);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
 
-export {setPageState, setAddress};
+export {setPageState, setAddress, makeFailureMessage};

@@ -9,7 +9,7 @@ const livingSpaceTypes = {
 };
 
 const fillTextContent = (element, property, textContent) => {
-  if (property.length === 0) {
+  if (!property) {
     element.remove();
 
     return false;
@@ -96,7 +96,7 @@ const getPhotoElement = (photoData) => {
 };
 
 const fillBunchElements = (element, elementsData, elementFunction) => {
-  if (elementsData.length === 0) {
+  if (!elementsData) {
     element.remove();
 
     return false;

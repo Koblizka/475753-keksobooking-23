@@ -3,7 +3,7 @@ import {setPageState, setAddress} from './form.js';
 import {prepareCards} from './card.js';
 
 const TokyoCenter = {
-  lat:35.6938,
+  lat: 35.6938,
   lng: 139.7034,
 };
 
@@ -60,4 +60,8 @@ const placeAllOffersOnMap = (offers) => {
   });
 };
 
-export {placeAllOffersOnMap};
+export {
+  placeAllOffersOnMap,
+  TokyoCenter,
+  mainPinMarker
+};
