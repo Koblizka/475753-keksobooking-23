@@ -1,7 +1,12 @@
 import {getOffersData} from './api.js';
-import {placeAllOffersOnMap} from './map.js';
-import {makeFailureMessage} from './form';
+import {placeAllOffersOnMap, clearMarkers} from './map.js';
+import {makeFailureMessage} from './form.js';
+import {filterOffers} from './filter.js';
 import './card.js';
 import './form.js';
 
-getOffersData(placeAllOffersOnMap, makeFailureMessage);
+getOffersData((offers) => {
+  console.log(0, offers);
+  placeAllOffersOnMap(offers);
+  filterOffers(offers);
+}, makeFailureMessage);

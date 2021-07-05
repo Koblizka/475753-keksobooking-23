@@ -2,6 +2,8 @@ import {PageState} from './data.js';
 import {setPageState, setAddress} from './form.js';
 import {prepareCards} from './card.js';
 
+const OFFER_LIMIT = 10;
+
 const TokyoCenter = {
   lat: 35.6938,
   lng: 139.7034,
@@ -42,26 +44,31 @@ const pinMarker = L.icon({
   iconAnchor: [20, 40],
 });
 
-const placeOneOfferOnMap = (offer) => {
+const placeOneOfferOnMap = (offer) =>
   L.marker([offer.location.lat, offer.location.lng], {
     icon: pinMarker,
     title: offer.offer.title,
-  }).addTo(map)
-    .bindPopup(
-      prepareCards(offer),
-      {
-        keepInView: true,
-      });
-};
+  }).bindPopup(
+    prepareCards(offer),
+    {
+      keepInView: true,
+    });
+
+const layerGroup = L.layerGroup().addTo(map);
 
 const placeAllOffersOnMap = (offers) => {
-  offers.forEach((offer) => {
-    placeOneOfferOnMap(offer);
+  offers.slice(0, OFFER_LIMIT).forEach((offer) => {
+    layerGroup.addLayer(placeOneOfferOnMap(offer));
   });
+};
+
+const clearMarkers = () => {
+  map.removeLayer(layerGroup);
 };
 
 export {
   placeAllOffersOnMap,
   TokyoCenter,
-  mainPinMarker
+  mainPinMarker,
+  clearMarkers
 };

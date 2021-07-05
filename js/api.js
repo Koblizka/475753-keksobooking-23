@@ -8,6 +8,7 @@ const getOffersData = (onSuccess, onFail) => {
       throw new Error (response.status, response.statusText);
     })
     .then((offersData) => {
+      // console.log(offersData);
       onSuccess(offersData);
     })
     .catch((err) => onFail(err.name, err.message));
