@@ -105,11 +105,12 @@ const renderFilteredOffers = (offers) => {
   renderOffersOnMap(offers.filter((offer) => comparingOfferWithFilter(offer, filterValues)));
 };
 
+const debounceApplayingFilter = debounce((offers) => renderFilteredOffers(offers));
 
 const onChangeFilterOptions = (offers) => {
   mapFiltersForm.addEventListener('change', (evt) => {
     prepareFilterOptions(evt.target);
-    debounce(() => renderFilteredOffers(offers))();
+    debounceApplayingFilter(offers);
   });
 };
 
