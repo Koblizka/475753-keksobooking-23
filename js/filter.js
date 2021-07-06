@@ -1,15 +1,7 @@
-import {placeAllOffersOnMap, clearMarkers} from './map.js';
+import {renderOffersOnMap, clearMarkers} from './map.js';
+import {debounce} from './utils/debounce.js';
 
 const mapFiltersForm = document.querySelector('.map__filters');
-const mapFiltersSelects = mapFiltersForm.querySelectorAll('option');
-const mapFiltersFeatures = mapFiltersForm.querySelectorAll('[name=features]');
-console.log(6588756, mapFiltersSelects, mapFiltersFeatures);
-
-const livingTypeFilter = mapFiltersForm['housing-type'];
-// arr[String(evt.name).replace(/housing-/g, '')] = evt.value;
-
-const typeValue = livingTypeFilter.querySelectorAll('option');
-console.log(5555, typeValue);
 
 const filterValues = {
   type: '',
@@ -19,12 +11,16 @@ const filterValues = {
   features: [],
 };
 
+const PriceValues = {
+  LOW: 10000,
+  HIGHT: 50000,
+};
+
 const prepareFilterInputs = (item) => {
   const property = item.name.replace(/housing-/g, '');
 
   if (item.value !== 'any') {
     filterValues[property] = item.value;
-
     return;
   }
 
@@ -50,60 +46,71 @@ const prepareFilterOptions = (item) => {
   prepareFilterInputs(item);
 };
 
-const comparePrice = (price, filterValue) => {
+const comparePrices = (offerPrice, filterValue) => {
   switch (filterValue){
+    case '':
+      return true;
     case 'low':
-      return price < 10000;
+      return offerPrice < PriceValues.LOW;
     case 'middle':
-      return (10000 < price) && (price > 50000);
+      return (PriceValues.LOW < offerPrice) && (offerPrice < PriceValues.HIGHT);
     case 'high':
-      return price > 50000;
+      return offerPrice > 50000;
+    default:
+      return false;
   }
 };
 
-const compareFilterWithOffers = (offer, filter) => {
+const compareValues = (offerValue, filterValue) => filterValue === '' ? true : String(offerValue) === String(filterValue);
 
-  const shallowOffer = {
+const compareFeatures = (offerFeatrues, filterFeatures) => {
+  if (filterFeatures === []) {
+    return true;
+  }
+
+  let countEqualFeatures = 0;
+
+  filterFeatures.forEach((feature) => {
+    if (offerFeatrues.includes(feature)) {
+      countEqualFeatures += 1;
+    }
+  });
+
+  if (countEqualFeatures === filterFeatures.length) {
+    return true;
+  }
+
+  return false;
+};
+
+const comparingOfferWithFilter = (offer, filter) => {
+
+  const tempOffer = {
     type: offer.offer.type,
     price: offer.offer.price,
     rooms: offer.offer.rooms,
     guests: offer.offer.guests,
-    features: offer.offer.features,
+    features: offer.offer.features ? offer.offer.features : [],
   };
 
-  for (const property in shallowOffer) {
-    // if (property === 'price') {
-    //   comparePrice(shallowOffer[property], filter.price);
-    // }
-
-    // if (property === 'features') {
-    //   filter.features.forEach((feature) => {
-    //     shallowOffer[property].includes(feature);
-    //   });
-    // }
-    return shallowOffer[property] === filter[property];
-  }
-
-  console.log(12414, shallowOffer);
+  return compareValues(tempOffer.type, filter.type) &&
+  compareValues(tempOffer.rooms, filter.rooms) &&
+  compareValues(tempOffer.guests, filter.guests) &&
+  comparePrices(tempOffer.price, filter.price) &&
+  compareFeatures(tempOffer.features, filter.features);
 };
 
-const filterOffers = (offers) => {
+const renderFilteredOffers = (offers) => {
+  clearMarkers();
+  renderOffersOnMap(offers.filter((offer) => comparingOfferWithFilter(offer, filterValues)));
+};
+
+
+const onChangeFilterOptions = (offers) => {
   mapFiltersForm.addEventListener('change', (evt) => {
     prepareFilterOptions(evt.target);
-    console.log(13, filterValues);
+    debounce(() => renderFilteredOffers(offers))();
   });
-
-  const t = offers.filter((offer) => {compareFilterWithOffers(offer, filterValues);});
-  console.log(t);
-  return t;
 };
 
-
-export {filterOffers};
-
-// взять временный объект
-// записать в него то, что выбрал пользователь
-//   - при этом создаются ключи и записываются свойства
-// сравнить ключи с оффреми
-
-// если возвращает тру, то ок
+export {onChangeFilterOptions};

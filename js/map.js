@@ -9,6 +9,8 @@ const TokyoCenter = {
   lng: 139.7034,
 };
 
+const markers = [];
+
 const map = L.map('map-canvas')
   .on('load', () => {
     setPageState(PageState.ACTIVE_STATE);
@@ -44,30 +46,34 @@ const pinMarker = L.icon({
   iconAnchor: [20, 40],
 });
 
-const placeOneOfferOnMap = (offer) =>
-  L.marker([offer.location.lat, offer.location.lng], {
+const placeOneOfferOnMap = (offer) => {
+  const marker = L.marker([offer.location.lat, offer.location.lng], {
     icon: pinMarker,
     title: offer.offer.title,
-  }).bindPopup(
-    prepareCards(offer),
-    {
-      keepInView: true,
-    });
+  });
 
-const layerGroup = L.layerGroup().addTo(map);
+  marker.addTo(map)
+    .bindPopup(
+      prepareCards(offer),
+      {
+        keepInView: true,
+      });
 
-const placeAllOffersOnMap = (offers) => {
+  markers.push(marker);
+};
+
+const renderOffersOnMap = (offers) => {
   offers.slice(0, OFFER_LIMIT).forEach((offer) => {
-    layerGroup.addLayer(placeOneOfferOnMap(offer));
+    placeOneOfferOnMap(offer);
   });
 };
 
 const clearMarkers = () => {
-  map.removeLayer(layerGroup);
+  markers.forEach((marker) => marker.remove());
 };
 
 export {
-  placeAllOffersOnMap,
+  renderOffersOnMap,
   TokyoCenter,
   mainPinMarker,
   clearMarkers
