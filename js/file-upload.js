@@ -55,7 +55,9 @@ const resetAvatarPreview = () => {
 };
 
 const resetLivingplacePreview = () => {
-  livingplaceFotoPreview.querySelector('img').remove();
+  if (livingplaceFotoPreview.querySelector('img')) {
+    livingplaceFotoPreview.querySelector('img').remove();
+  }
 };
 
 const resetAllPreviews = () => {

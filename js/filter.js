@@ -67,4 +67,9 @@ const onChangeFilterOptions = (offers) => {
   });
 };
 
-export {onChangeFilterOptions};
+const resetFilter = (offers) => {
+  mapFilterForm.reset();
+  renderOffersOnMap(offers);
+};
+
+export {onChangeFilterOptions, resetFilter};

@@ -12,6 +12,8 @@ const adFormResetButton = adForm.querySelector('.ad-form__reset');
 const templateSuccessModal = document.querySelector('#success').content.querySelector('.success');
 const templateErrorModal = document.querySelector('#error').content.querySelector('.error');
 
+console.log(templateSuccessModal);
+console.log(templateErrorModal);
 
 const {
   title,
@@ -247,7 +249,7 @@ const onSubmit = (evt) => {
 
   sendForm(
     showModal(ModalState.SUCCESS, templateSuccessModal),
-    showModal((ModalState.FAIL, templateErrorModal)),
+    showModal(ModalState.FAIL, templateErrorModal),
     new FormData(adForm),
   );
 };
@@ -265,10 +267,9 @@ type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
 adForm.addEventListener('submit', onSubmit);
-adFormResetButton.addEventListener('click', onRestButtonClick);
 
 setPageState(PageState.DEACTIVE_STATE);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
 
-export {setPageState, setAddress, makeFailureMessage};
+export {setPageState, setAddress, makeFailureMessage, adFormResetButton, onRestButtonClick};
