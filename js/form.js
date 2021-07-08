@@ -1,6 +1,7 @@
 import {PageState} from './data.js';
 import {sendForm} from './api.js';
 import {TokyoCenter, mainPinMarker} from './map.js';
+import {resetAllPreviews} from './file-upload.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -151,6 +152,7 @@ const resetAdForm = () => {
   adForm.reset();
   setAddress(TokyoCenter);
   mainPinMarker.setLatLng(TokyoCenter);
+  resetAllPreviews();
 };
 
 const makeFailureMessage = (statusName, statusMessage) => {
