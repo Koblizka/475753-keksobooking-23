@@ -1,16 +1,26 @@
 import {getOffersData} from './api.js';
 import {renderOffersOnMap} from './map.js';
-import {makeFailureMessage, adFormResetButton, onRestButtonClick} from './form.js';
+import {
+  adForm,
+  adFormResetButton,
+  onRestButtonClick,
+  onSubmit,
+  makeFailureMessage
+} from './form.js';
 import {onChangeFilterOptions, resetFilter} from './filter.js';
 import './card.js';
-import './form.js';
 import './file-upload.js';
 
 getOffersData((offers) => {
   renderOffersOnMap(offers);
   onChangeFilterOptions(offers);
-  adFormResetButton.addEventListener('click', () => {
-    onRestButtonClick;
+  adForm.addEventListener('submit', (evt) => {
+    onSubmit(evt);
+    resetFilter(offers);
+  });
+
+  adFormResetButton.addEventListener('click', (evt) => {
+    onRestButtonClick(evt);
     resetFilter(offers);
   });
 }, makeFailureMessage);
