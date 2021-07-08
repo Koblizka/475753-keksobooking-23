@@ -248,8 +248,8 @@ const onSubmit = (evt) => {
   evt.preventDefault();
 
   sendForm(
-    showModal(ModalState.SUCCESS, templateSuccessModal),
-    showModal(ModalState.FAIL, templateErrorModal),
+    () => showModal(ModalState.SUCCESS, templateSuccessModal),
+    () => showModal(ModalState.FAIL, templateErrorModal),
     new FormData(adForm),
   );
 };
