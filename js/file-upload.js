@@ -10,7 +10,7 @@ const livingplaceFotoPreview = livingplaceFotoUploadField.querySelector('.ad-for
 const DefaultFotoValues = {
   AVATAR_SRC: 'img/muffin-grey.svg',
   LIVINGPLACE_PREVIEW_ELEMENT_HEIGHT: 40,
-  LIVINGPLACE_PREVIEW_ELEMENT_WIDTH: 45
+  LIVINGPLACE_PREVIEW_ELEMENT_WIDTH: 45,
 };
 
 
