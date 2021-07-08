@@ -34,16 +34,16 @@ const comparePrices = (offerPrice, filterValue) => {
 const compareValues = (offerValue, filterValue) => filterValue === DEFAULT_FILTER_VALUE ? true : String(offerValue) === String(filterValue);
 
 const compareFeatures = (offerFeatrues) => {
-  const choosenFeatures = mapFilterForm.querySelectorAll('.map__checkbox:checked');
+  const chosenFeatures = mapFilterForm.querySelectorAll('.map__checkbox:checked');
   let countEqualFeatures = 0;
 
-  choosenFeatures.forEach((feature) => {
+  chosenFeatures.forEach((feature) => {
     if (offerFeatrues.includes(feature.value)) {
       countEqualFeatures += 1;
     }
   });
 
-  return countEqualFeatures === choosenFeatures.length;
+  return countEqualFeatures === chosenFeatures.length;
 };
 
 const comparingOfferWithFilter = (offer) =>
