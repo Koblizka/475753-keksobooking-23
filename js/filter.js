@@ -3,6 +3,11 @@ import {debounce} from './utils/debounce.js';
 
 const DEFAULT_FILTER_VALUE = 'any';
 
+const PriceValues = {
+  LOW: 10000,
+  HIGHT: 50000,
+};
+
 const mapFilterForm = document.querySelector('.map__filters');
 
 const mapFilterFormElements = mapFilterForm.elements;
@@ -10,11 +15,6 @@ const typeFilterElement = mapFilterFormElements['housing-type'];
 const priceFilterElement = mapFilterFormElements['housing-price'];
 const roomsFilterElement = mapFilterFormElements['housing-rooms'];
 const guestsFilterElement = mapFilterFormElements['housing-guests'];
-
-const PriceValues = {
-  LOW: 10000,
-  HIGHT: 50000,
-};
 
 const comparePrices = (offerPrice, filterValue) => {
   switch (filterValue){

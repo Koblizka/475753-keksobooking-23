@@ -1,3 +1,8 @@
+const DefaultFotoValues = {
+  AVATAR_SRC: 'img/muffin-grey.svg',
+  LIVINGPLACE_PREVIEW_ELEMENT_HEIGHT: 40,
+  LIVINGPLACE_PREVIEW_ELEMENT_WIDTH: 45,
+};
 
 const avatarUploadFiled = document.querySelector('.ad-form-header__upload');
 const avatarUploadInput = avatarUploadFiled.querySelector('#avatar');
@@ -6,13 +11,6 @@ const avatarFilePreview = avatarUploadFiled.querySelector('.ad-form-header__prev
 const livingplaceFotoUploadField = document.querySelector('.ad-form__photo-container');
 const livingplaceFotoInput = livingplaceFotoUploadField.querySelector('#images');
 const livingplaceFotoPreview = livingplaceFotoUploadField.querySelector('.ad-form__photo');
-
-const DefaultFotoValues = {
-  AVATAR_SRC: 'img/muffin-grey.svg',
-  LIVINGPLACE_PREVIEW_ELEMENT_HEIGHT: 40,
-  LIVINGPLACE_PREVIEW_ELEMENT_WIDTH: 45,
-};
-
 
 const loadFile = (fileInputElement, previewElement) => {
   const file = fileInputElement.files[0];

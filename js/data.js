@@ -61,10 +61,6 @@ const OFFER_PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
-const OfferPriceRange = {
-  MIN: 0,
-  MAX: 100000,
-};
 const OFFER_ROOM_AMOUNTS = [
   1,
   2,
@@ -77,6 +73,11 @@ const OFFER_CAPACITY = [
   3,
   'не для гостей',
 ];
+
+const OfferPriceRange = {
+  MIN: 0,
+  MAX: 100000,
+};
 const PageState = {
   ACTIVE_STATE: 'active',
   DEACTIVE_STATE: 'deactive',

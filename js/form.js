@@ -3,6 +3,17 @@ import {sendForm} from './api.js';
 import {TokyoCenter, mainPinMarker} from './map.js';
 import {resetAllPreviews} from './file-upload.js';
 
+const LEFT_MOUSE_BUTTON = 0;
+
+const TitleLength = {
+  MIN: 30,
+  MAX: 100,
+};
+const ModalState = {
+  FAIL: 'fail',
+  SUCCESS: 'success',
+};
+
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFiltersInputs = document.querySelector('.map__filters').querySelectorAll('[class^=map__]');
@@ -28,10 +39,7 @@ const roomsCapacity = {
   3: [1, 2, 3],
   100: [0],
 };
-const TitleLength = {
-  MIN: 30,
-  MAX: 100,
-};
+
 const prices =  {
   max: 1000000,
   bungalow: 0,
@@ -40,13 +48,6 @@ const prices =  {
   house: 5000,
   palace: 10000,
 };
-
-const ModalState = {
-  FAIL: 'fail',
-  SUCCESS: 'success',
-};
-
-const leftMouseButton = 0;
 
 const setFormState = (formItems, isActivate) => {
   if (isActivate === 'active') {
@@ -202,7 +203,7 @@ const closeModal = (modalElement) => {
   const onClose = (evt) => {
     evt.preventDefault();
 
-    if (evt.key === 'Escape' || evt.button === leftMouseButton) {
+    if (evt.key === 'Escape' || evt.button === LEFT_MOUSE_BUTTON) {
       modalElement.remove();
 
       document.removeEventListener('keydown', onClose);
