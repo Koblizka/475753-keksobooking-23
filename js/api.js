@@ -29,4 +29,7 @@ const sendForm = (onSuccess, onFail, body) => {
     .catch((err) => onFail(err.name, err.message));
 };
 
-export {getOffersData, sendForm};
+export {
+  getOffersData,
+  sendForm
+};

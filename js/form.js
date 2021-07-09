@@ -276,4 +276,5 @@ export {
   adForm,
   adFormResetButton,
   onRestButtonClick,
-  onSubmit};
+  onSubmit
+};

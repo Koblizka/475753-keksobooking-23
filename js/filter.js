@@ -72,4 +72,7 @@ const resetFilter = (offers) => {
   renderOffersOnMap(offers);
 };
 
-export {onChangeFilterOptions, resetFilter};
+export {
+  onChangeFilterOptions,
+  resetFilter
+};

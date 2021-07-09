@@ -7,7 +7,10 @@ import {
   onSubmit,
   makeFailureMessage
 } from './form.js';
-import {onChangeFilterOptions, resetFilter} from './filter.js';
+import {
+  onChangeFilterOptions,
+  resetFilter
+} from './filter.js';
 import './card.js';
 import './file-upload.js';
 
