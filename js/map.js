@@ -8,6 +8,15 @@ const TokyoCenter = {
   lat: 35.6938,
   lng: 139.7034,
 };
+const MainPin = {
+  WIDTH: 52,
+  HEIGHT: 52,
+};
+const PinMarker = {
+  WIDTH: 40,
+  HEIGHT: 40,
+};
+
 
 const markers = [];
 
@@ -25,8 +34,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [21.5, 52],
+  iconSize: [MainPin.HEIGHT, MainPin.WIDTH],
+  iconAnchor: [(MainPin.HEIGHT / 2), MainPin.WIDTH],
 });
 
 const mainPinMarker = L.marker(TokyoCenter, {
@@ -42,8 +51,8 @@ mainPinMarker.on('moveend', (evt) => {
 
 const pinMarker = L.icon({
   iconUrl: 'img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [PinMarker.HEIGHT, PinMarker.WIDTH],
+  iconAnchor: [(PinMarker.HEIGHT / 2), PinMarker.WIDTH],
 });
 
 const placeOneOfferOnMap = (offer) => {

@@ -41,8 +41,8 @@ const onLivingplaceFotoLoad = () => {
   fotoElement.parentElement.style.alignItems = 'center';
   fotoElement.parentElement.style.justifyContent = 'center';
 
-  fotoElement.width = 45;
-  fotoElement.height = 40;
+  fotoElement.width = DefaultFotoValues.LIVINGPLACE_PREVIEW_ELEMENT_WIDTH;
+  fotoElement.height = DefaultFotoValues.LIVINGPLACE_PREVIEW_ELEMENT_HEIGHT;
   fotoElement.alt = 'Фотография жилья';
 
   loadFile(livingplaceFotoInput, fotoElement);

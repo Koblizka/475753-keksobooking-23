@@ -1,3 +1,8 @@
+const PhotoSize = {
+  WIDTH: 45,
+  HEIGHT: 40,
+};
+
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const livingSpaceTypes = {
@@ -82,8 +87,8 @@ const getFeatureElement = (featureData) => {
 };
 
 const getPhotoElement = (photoData) => {
-  const photoWidth = 45;
-  const photoHeight = 40;
+  const photoWidth = PhotoSize.WIDTH;
+  const photoHeight = PhotoSize.HEIGHT;
   const photoItem = document.createElement('img');
 
   photoItem.classList.add ('popup__photo');
