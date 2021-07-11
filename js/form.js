@@ -167,6 +167,7 @@ const resetAdForm = () => {
   setAddress(TokyoCenter);
   mainPinMarker.setLatLng(TokyoCenter);
   resetAllPreviews();
+  onTypeChange();
 };
 
 const makeFailureMessage = (statusName, statusMessage) => {
@@ -275,7 +276,10 @@ const onRestButtonClick = (evt) => {
 title.addEventListener('input', onTitleInput);
 room.addEventListener('change', onRoomsChange);
 price.addEventListener('input', onPriceInput);
-type.addEventListener('change', onTypeChange);
+type.addEventListener('change', (evt) => {
+  onTypeChange(evt.target);
+  priceValidity(price);
+});
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
 
