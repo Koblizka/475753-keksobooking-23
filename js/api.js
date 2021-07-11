@@ -1,5 +1,10 @@
+const OffersUrl = {
+  DATA: 'https://23.javascript.pages.academy/keksobooking/data',
+  ADDRESS: 'https://23.javascript.pages.academy/keksobooking',
+};
+
 const getOffersData = (onSuccess, onFail) => {
-  fetch('https://23.javascript.pages.academy/keksobooking/data')
+  fetch(OffersUrl.DATA)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -14,7 +19,7 @@ const getOffersData = (onSuccess, onFail) => {
 };
 
 const sendForm = (onSuccess, onFail, body) => {
-  fetch('https://23.javascript.pages.academy/keksobooking',
+  fetch(OffersUrl.ADDRESS,
     {
       method: 'POST',
       body,

@@ -1,9 +1,14 @@
-import {PageState} from './data.js';
 import {sendForm} from './api.js';
-import {TokyoCenter, mainPinMarker} from './map.js';
+import {
+  TokyoCenter,
+  mainPinMarker
+} from './map.js';
 import {resetAllPreviews} from './file-upload.js';
 
-const LEFT_MOUSE_BUTTON = 0;
+const Button = {
+  LEFT_MOUSE: 0,
+  ESCAPE: 'Escape',
+};
 
 const TitleLength = {
   MIN: 30,
@@ -13,6 +18,11 @@ const ModalState = {
   FAIL: 'fail',
   SUCCESS: 'success',
 };
+const PageState = {
+  ACTIVE_STATE: 'active',
+  DEACTIVE_STATE: 'deactive',
+};
+
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -123,6 +133,7 @@ const setAddress = ({lat, lng}) => {
 
 const onTypeChange = () => {
   price.setAttribute('min', `${prices[type.value]}`);
+  price.setAttribute('placeholder', `${prices[type.value]}`);
 };
 
 const onPriceInput = () => {
@@ -203,7 +214,7 @@ const closeModal = (modalElement) => {
   const onClose = (evt) => {
     evt.preventDefault();
 
-    if (evt.key === 'Escape' || evt.button === LEFT_MOUSE_BUTTON) {
+    if (evt.key === Button.ESCAPE || evt.button === Button.LEFT_MOUSE) {
       modalElement.remove();
 
       document.removeEventListener('keydown', onClose);
@@ -268,8 +279,10 @@ timeout.addEventListener('change', onTimeoutChange);
 setPageState(PageState.DEACTIVE_STATE);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
+onTypeChange();
 
 export {
+  PageState,
   setPageState,
   setAddress,
   makeFailureMessage,

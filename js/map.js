@@ -1,9 +1,20 @@
-import {PageState} from './data.js';
-import {setPageState, setAddress} from './form.js';
+import {
+  PageState,
+  setPageState,
+  setAddress
+} from './form.js';
 import {prepareCards} from './card.js';
 
 const OFFER_LIMIT = 10;
 
+const TileLayer = {
+  URL: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  COPYRIGHT: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+};
+const PinIconSrc = {
+  MAIN_PIN: 'img/main-pin.svg',
+  MARKER_PIN: 'img/pin.svg',
+};
 const TokyoCenter = {
   lat: 35.6938,
   lng: 139.7034,
@@ -26,14 +37,14 @@ const map = L.map('map-canvas')
   })
   .setView(TokyoCenter, 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+L.tileLayer(TileLayer.URL, {
+  attribution: TileLayer.COPYRIGHT,
 
 },
 ).addTo(map);
 
 const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
+  iconUrl: PinIconSrc.MAIN_PIN,
   iconSize: [MainPin.HEIGHT, MainPin.WIDTH],
   iconAnchor: [(MainPin.HEIGHT / 2), MainPin.WIDTH],
 });
@@ -50,7 +61,7 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 const pinMarker = L.icon({
-  iconUrl: 'img/pin.svg',
+  iconUrl: PinIconSrc.MARKER_PIN,
   iconSize: [PinMarker.HEIGHT, PinMarker.WIDTH],
   iconAnchor: [(PinMarker.HEIGHT / 2), PinMarker.WIDTH],
 });
