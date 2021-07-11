@@ -26,9 +26,10 @@ const PageState = {
 
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = adForm.querySelectorAll('fieldset');
-const mapFiltersInputs = document.querySelector('.map__filters').querySelectorAll('[class^=map__]');
-const capacityOptions = adForm.capacity.querySelectorAll('option');
 const adFormResetButton = adForm.querySelector('.ad-form__reset');
+const capacityOptions = adForm.capacity.querySelectorAll('option');
+const mapFilters = document.querySelector('.map__filters');
+const mapFiltersInputs = mapFilters.querySelectorAll('[class^=map__]');
 
 const templateSuccessModal = document.querySelector('#success').content.querySelector('.success');
 const templateErrorModal = document.querySelector('#error').content.querySelector('.error');
@@ -60,7 +61,7 @@ const prices =  {
 };
 
 const setFormState = (formItems, isActivate) => {
-  if (isActivate === 'active') {
+  if (isActivate === PageState.ACTIVE_STATE) {
     formItems.forEach((item) => {
       item.removeAttribute('disabled');
     });
@@ -74,14 +75,16 @@ const setFormState = (formItems, isActivate) => {
 };
 
 const setPageState = (isActive) => {
-  if (isActive) {
+  if (isActive === PageState.ACTIVE_STATE) {
     adForm.classList.remove('ad-form--disabled');
+    mapFilters.classList.remove('map__filters--disabled');
     setFormState(adFormFieldsets, PageState.ACTIVE_STATE);
     setFormState(mapFiltersInputs, PageState.ACTIVE_STATE);
     return;
   }
 
   adForm.classList.add('ad-form--disabled');
+  mapFilters.classList.add('map__filters--disabled');
   setFormState(adFormFieldsets, PageState.DEACTIVE_STATE);
   setFormState(mapFiltersInputs, PageState.DEACTIVE_STATE);
 };
@@ -276,7 +279,7 @@ type.addEventListener('change', onTypeChange);
 timein.addEventListener('change', onTimeinChange);
 timeout.addEventListener('change', onTimeoutChange);
 
-setPageState(PageState.DEACTIVE_STATE);
+// setPageState(PageState.DEACTIVE_STATE);
 disableCapacityOptions();
 changeRoomCapacity(room.value);
 onTypeChange();

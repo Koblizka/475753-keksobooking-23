@@ -1,6 +1,6 @@
 import {
-  PageState,
-  setPageState,
+  // PageState,
+  // setPageState,
   setAddress
 } from './form.js';
 import {prepareCards} from './card.js';
@@ -27,13 +27,14 @@ const PinMarker = {
   WIDTH: 40,
   HEIGHT: 40,
 };
-
+let isMapLoaded = null;
 
 const markers = [];
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    setPageState(PageState.ACTIVE_STATE);
+    // setPageState(PageState.ACTIVE_STATE);
+    isMapLoaded = true;
   })
   .setView(TokyoCenter, 13);
 
@@ -93,6 +94,7 @@ const clearMarkers = () => {
 };
 
 export {
+  isMapLoaded,
   renderOffersOnMap,
   TokyoCenter,
   mainPinMarker,
