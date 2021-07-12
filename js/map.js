@@ -1,6 +1,4 @@
 import {
-  // PageState,
-  // setPageState,
   setAddress
 } from './form.js';
 import {prepareCards} from './card.js';
@@ -33,7 +31,6 @@ const markers = [];
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    // setPageState(PageState.ACTIVE_STATE);
     isMapLoaded = true;
   })
   .setView(TokyoCenter, 13);
