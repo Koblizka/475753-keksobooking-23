@@ -1,5 +1,5 @@
 import {getOffersData} from './api.js';
-import {isMapLoaded, renderOffersOnMap} from './map.js';
+
 import {
   adForm,
   PageState,
@@ -7,8 +7,14 @@ import {
   onRestButtonClick,
   onSubmit,
   makeFailureMessage,
-  setPageState
+  setPageState,
+  setAddress
 } from './form.js';
+import {
+  renderOffersOnMap,
+  initialMap,
+  TokyoCenter
+} from './map.js';
 import {
   onChangeFilterOptions,
   resetFilter
@@ -18,19 +24,21 @@ import './file-upload.js';
 
 setPageState(PageState.DEACTIVE_STATE);
 
-getOffersData((offers) => {
-  if (isMapLoaded) {
+const onLoadMap = () => {
+  getOffersData((offers) => {
     setPageState(PageState.ACTIVE_STATE);
-  }
+    setAddress(TokyoCenter);
+    renderOffersOnMap(offers);
+    onChangeFilterOptions(offers);
+    adForm.addEventListener('submit', (evt) => {
+      onSubmit(evt);
+      resetFilter(offers);
+    });
+    adFormResetButton.addEventListener('click', (evt) => {
+      onRestButtonClick(evt);
+      resetFilter(offers);
+    });
+  }, makeFailureMessage);
+};
 
-  renderOffersOnMap(offers);
-  onChangeFilterOptions(offers);
-  adForm.addEventListener('submit', (evt) => {
-    onSubmit(evt);
-    resetFilter(offers);
-  });
-  adFormResetButton.addEventListener('click', (evt) => {
-    onRestButtonClick(evt);
-    resetFilter(offers);
-  });
-}, makeFailureMessage);
+initialMap(onLoadMap);

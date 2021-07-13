@@ -25,21 +25,23 @@ const PinMarker = {
   WIDTH: 40,
   HEIGHT: 40,
 };
-let isMapLoaded = null;
 
 const markers = [];
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    isMapLoaded = true;
-  })
-  .setView(TokyoCenter, 13);
+const map = L.map('map-canvas');
 
-L.tileLayer(TileLayer.URL, {
-  attribution: TileLayer.COPYRIGHT,
+const initialMap = (cb) => {
+  map.on('load', () => {
+    cb();
+  });
 
-},
-).addTo(map);
+  map.setView(TokyoCenter, 13);
+
+  L.tileLayer(TileLayer.URL, {
+    attribution: TileLayer.COPYRIGHT,
+
+  }).addTo(map);
+};
 
 const mainPinIcon = L.icon({
   iconUrl: PinIconSrc.MAIN_PIN,
@@ -51,8 +53,6 @@ const mainPinMarker = L.marker(TokyoCenter, {
   icon: mainPinIcon,
   draggable: true,
 }).addTo(map);
-
-setAddress(TokyoCenter);
 
 mainPinMarker.on('moveend', (evt) => {
   setAddress(evt.target.getLatLng());
@@ -91,9 +91,9 @@ const clearMarkers = () => {
 };
 
 export {
-  isMapLoaded,
   renderOffersOnMap,
   TokyoCenter,
   mainPinMarker,
-  clearMarkers
+  clearMarkers,
+  initialMap
 };
